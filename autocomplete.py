@@ -27,11 +27,11 @@ def display_numbered_options(numbered_options):
 
 # TESTING
 
-selection = autocomplete("hell", ["hello", "hell", "help", "ginger", "love", "held"]) # returns a list
-print(selection)
+#selection = autocomplete("hell", ["hello", "hell", "help", "ginger", "love", "held"]) # returns a list
+#print(selection)
 
-choices = number_options(selection) # returns a dictionary
-print(choices)
+#choices = number_options(selection) # returns a dictionary
+#print(choices)
 
-show = display_numbered_options(choices) # returns a list
-print(show)
+#show = display_numbered_options(choices) # returns a list
+#print(show)
