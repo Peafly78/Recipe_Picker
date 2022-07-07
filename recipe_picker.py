@@ -4,7 +4,10 @@ from recipe_data import recipes, ingredients
 
 # declare variables
 
-
+welcome = """"
+What would you like to cook today? --- Not sure? 
+What do you have available that you would like to cook something with? 
+"""
 
 # bring dataset into required data structure
 
@@ -18,65 +21,73 @@ from recipe_data import recipes, ingredients
 
 def get_string():
     string = input("""
-What would you like to cook today? --- Not sure? 
-What do you have available that you would like to cook something with? 
 Give me one or more characters of the ingredient you would like to look up and hit enter. 
 I'll show you the options.
 > 
 """)
     return string
 
-
-# formulate question flow
-
-
-string = get_string()
-selection = autocomplete(string, ingredients)
-
-while not selection:
-    string = input(f'''
+def get_ingredient():
+    string = get_string()
+    selection = autocomplete(string, ingredients)
+    while not selection:
+        string = input(f'''
     Sorry. There is no ingredient in the database that starts with "{string}".
     Please try again.
     ''')
-    selection = autocomplete(string, ingredients)
-
-numbered_options = number_options(selection)
-display = display_numbered_options(numbered_options)
-
-print(f'These are the ingredients that start with "{string}".')
-print(display)
-
-picked_ingredients = list()
-
-ingredient_1 = input(f''' 
+        selection = autocomplete(string, ingredients)
+    numbered_options = number_options(selection)
+    print(numbered_options)
+    display = display_numbered_options(numbered_options)
+    print(f'These are the ingredients that start with "{string}".')
+    print(display)
+    ingredient = input(f''' 
 Pick your ingredient by typing the number that belongs to it, 
 or type "n" if you would like to start over.
-''')
-
-if ingredient_1 == "n":
-    # invoke function that gets string / to start over
-    pass
-
-elif ingredient_1 not in numbered_options.keys(): # how can I make this a while loop
-    ingredient_1 = input(f'''
-    Sorry, {ingredient_1} is not a valid input. Please, try again.
+''')    
+    while ingredient != "n" and int(ingredient) not in numbered_options.keys():
+        ingredient = input(f'''
+    Sorry, "{ingredient}" is not a valid input. Please, try again.
     ''')
 
-else:
-    ingredient_1 = numbered_options[int(ingredient_1)]
-    picked_ingredients.append(ingredient_1)
-
-ingredient_2 = input(f'''
-Great choice. Do you want to look at recipes with "{ingredient_1}" (press enter), 
-or do you want to add another ingredient? (type "y")
+    if ingredient == "n":
+        return get_ingredient()
+    ingredient = numbered_options[int(ingredient)]
+    print(f'''
+    Great choice. Let's add "{ingredient}" to the search list.
 ''')
+    return ingredient
 
-if ingredient_2 == "y":
-    # invoke function that gets string / to start over, adding another ingredient to the picked list
-    # create helper functions for that
-    pass
 
-print(picked_ingredients)
+def construct_search_list():
+    picked_ingredients = list()
+    ingredient_1 = get_ingredient()
+    picked_ingredients.append(ingredient_1)
+    ingredient_2 = input("Would you like to add another ingredient (y/n)\n> ")
+    while ingredient_2 != "y" and ingredient_2 != "n":
+        ingredient_2 = input('Come again? Please type "y" for yes or "n" for no.')
+    if ingredient_2 == "y":
+        ingredient_2 = get_ingredient()
+        picked_ingredients.append(ingredient_2)
+    else:
+        return picked_ingredients
+    ingredient_3 = input("Would you like to add a third and final ingredient (y/n)")
+    while ingredient_3 != "y" and ingredient_3 != "n":
+        ingredient_2 = input('Come again? Please type "y" for yes or "n" for no.')
+    if ingredient_3 == "y":
+        ingredient_3 = get_ingredient()
+        picked_ingredients.append(ingredient_3)
+    return picked_ingredients
+
+
+
+# formulate question flow
+
+print(welcome)
+
+search_list = construct_search_list()
+print(search_list)
 
 
 # TESTING
+
